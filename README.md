@@ -207,6 +207,7 @@ created_at: datetime default=datetime.jstnow
 updated_at: datetime default=datetime.jstnow
 ```
 
+```mermaid
 erDiagram
 User {
 int id PK
@@ -359,3 +360,4 @@ datetime updated_at
     SupportPlan ||--o{ SupportPlanStatus : "tracks progress with"
     SupportPlan ||--o{ Deliverables : "produces"
     SupportPlan ||--o{ Notice : "triggers"
+```
