@@ -45,53 +45,76 @@ B 型事業所に勤務するスタッフ
 # データ設計
 
 User
+
+```
 id: int(PK)
 email: var not null unique
 password_hash: var not null
 is_active: boolean default true
 user_icon: var
-/created_at: datetime default=datetime.jstnow 共通、省略
+/created_at: datetime default=datetime.jstnow #共通、省略
 /updated_at: datetime default=datetime.jstnow
+```
 
 AccessToken
+
+```
 id: int(PK)
 user_id: int(FK=user.id)
 token: var
 is_active: boolean default=true
+```
 
 Message
+
+```
 id: int(PK)
 user_id: var
 text: var
+```
 
-    	ServiceRecipient			　　　　　
-    	id: int(PK)
-    	service_office_id: int(FK=service_office.id not null)
-    	name:  var(30) not null
-    	birthday: datetime
-      disease: var
+ServiceRecipient
+
+```　　
+id: int(PK)
+service_office_id: int(FK=service_office.id not null)
+name:  var(30) not null
+birthday: datetime
+disease: var
+```
 
 ServiceOffice
+
+```
 id: int(PK)
 user_id: int(FK=user.id)
 service_recipient_id: int(FK=service_recipient.id)
 name: var
 type: var
+```
 
 Notice
-id: int(PK)  
+
+```
+id: int(PK)
 service_office_id: int(FK=service_office.id not null)
 service_recipient_id: int(FK=service_recipient.id not null)
 message: var
 birth_month_included: boolean
+```
 
 SupportPlanner
+
+```
 id: int(PK)
 service_recipient_id: int(FK=service_recipient.id not null)
 name: var
 contact: var
+```
 
 SupportPlan
+
+```
 id: int(PK)
 service_recipient_id: int(FK=service_recipient.id not null)
 planning_start: datetime
@@ -101,9 +124,13 @@ draft_plan: boolean(default = false) 　
 meeting_of_managers: boolean(default = false)
 this_plan: boolean(default = false)
 monitoring: boolean(default = false)
+```
 
-    	Deliverables
-    	id: int(PK)
-    	support_plan_id: int(FK=support_plan.id)
-    	file_path: var
-    	file_view: var
+Deliverables
+
+```
+id: int(PK)
+support_plan_id: int(FK=support_plan.id)
+file_path: var
+file_view: var
+```
