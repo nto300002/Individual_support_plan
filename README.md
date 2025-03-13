@@ -206,3 +206,156 @@ file_view: text
 created_at: datetime default=datetime.jstnow
 updated_at: datetime default=datetime.jstnow
 ```
+
+erDiagram
+User {
+int id PK
+text email
+text password_hash
+boolean is_active
+text user_icon
+datetime created_at
+datetime updated_at
+}
+
+    AccessToken {
+        int id PK
+        int user_id FK
+        text token
+        boolean is_active
+        datetime created_at
+        datetime updated_at
+    }
+
+    Message {
+        int id PK
+        int sender_id FK
+        int recipient_id FK
+        text text
+        boolean read
+        datetime sent_at
+        datetime created_at
+        datetime updated_at
+    }
+
+    ServiceRecipient {
+        int id PK
+        int service_office_id FK
+        text name
+        datetime birthday
+        text disease
+        datetime created_at
+        datetime updated_at
+    }
+
+    UserServiceOffice {
+        int id PK
+        int user_id FK
+        int service_office_id FK
+        text role
+        datetime created_at
+        datetime updated_at
+    }
+
+    ServiceRecipientOffice {
+        int id PK
+        int service_recipient_id FK
+        int service_office_id FK
+        datetime created_at
+        datetime updated_at
+    }
+
+    ServiceOffice {
+        int id PK
+        text name
+        text type
+        datetime created_at
+        datetime updated_at
+    }
+
+    Notice {
+        int id PK
+        int service_office_id FK
+        int service_recipient_id FK
+        int support_plan_id FK
+        text message
+        enum notification_type
+        datetime deadline_date
+        boolean is_read
+        int priority
+        datetime created_at
+        datetime updated_at
+    }
+
+    UserNotificationSettings {
+        int id PK
+        int user_id FK
+        boolean email_notifications
+        int deadline_advance_days
+        datetime created_at
+        datetime updated_at
+    }
+
+    SupportPlanner {
+        int id PK
+        int service_recipient_id FK
+        text name
+        text contact
+        datetime created_at
+        datetime updated_at
+    }
+
+    SupportPlan {
+        int id PK
+        int service_recipient_id FK
+        datetime planning_start
+        datetime plan_deadlines
+        boolean assessment
+        boolean draft_plan
+        boolean meeting_of_managers
+        boolean this_plan
+        boolean monitoring
+        datetime created_at
+        datetime updated_at
+    }
+
+    SupportPlanStatus {
+        int id PK
+        int support_plan_id FK
+        enum step_type
+        boolean completed
+        datetime completed_at
+        int completed_by FK
+        text notes
+        datetime created_at
+        datetime updated_at
+    }
+
+    Deliverables {
+        int id PK
+        int support_plan_id FK
+        text file_path
+        text file_view
+        datetime created_at
+        datetime updated_at
+    }
+
+    User ||--o{ AccessToken : "has"
+    User ||--o{ Message : "sends"
+    User ||--o{ UserNotificationSettings : "configures"
+    User ||--o{ UserServiceOffice : "belongs to"
+    User ||--o{ SupportPlanStatus : "completes"
+
+    ServiceOffice ||--o{ UserServiceOffice : "employs"
+    ServiceOffice ||--o{ ServiceRecipient : "manages"
+    ServiceOffice ||--o{ ServiceRecipientOffice : "connects with"
+    ServiceOffice ||--o{ Notice : "generates"
+
+    ServiceRecipient ||--o{ ServiceRecipientOffice : "belongs to"
+    ServiceRecipient ||--o{ SupportPlanner : "has"
+    ServiceRecipient ||--o{ SupportPlan : "requires"
+    ServiceRecipient ||--o{ Notice : "receives"
+
+    SupportPlan ||--o{ SupportPlanStatus : "tracks progress with"
+    SupportPlan ||--o{ Deliverables : "produces"
+    SupportPlan ||--o{ Notice : "triggers"
