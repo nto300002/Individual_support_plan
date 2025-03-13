@@ -44,8 +44,8 @@ B 型事業所に勤務するスタッフ
 - 並び替え：名前順　期限の残り少ない順
 - 事業所を選択する(ユーザー:スタッフがどの事業所に所属しているか)
 - 利用者の計画を手伝うプランナーの情報を表示
-- 確認書類を共有する機能
-- ユーザー同士でメッセージ送信
+- (確認書類を共有する機能)
+- (ユーザー同士でメッセージ送信)
 
 # データ設計
 
@@ -53,12 +53,12 @@ User
 
 ```
 id: int(PK)
-email: var not null unique
-password_hash: var not null
+email: text not null unique
+password_hash: text not null
 is_active: boolean default true
-user_icon: var
-/created_at: datetime default=datetime.jstnow #共通、省略
-/updated_at: datetime default=datetime.jstnow
+user_icon: text
+created_at: datetime default=datetime.jstnow
+updated_at: datetime default=datetime.jstnow
 ```
 
 AccessToken
@@ -66,16 +66,23 @@ AccessToken
 ```
 id: int(PK)
 user_id: int(FK=user.id)
-token: var
+token: text
 is_active: boolean default=true
+created_at: datetime default=datetime.jstnow
+updated_at: datetime default=datetime.jstnow
 ```
 
 Message
 
 ```
 id: int(PK)
-user_id: var
-text: var
+sender_id: int(FK=user.id)
+recipient_id: int(FK=user.id)
+text: text
+read: boolean
+sent_at: datetime
+created_at: datetime default=datetime.jstnow
+updated_at: datetime default=datetime.jstnow
 ```
 
 ServiceRecipient
@@ -83,19 +90,42 @@ ServiceRecipient
 ```　　
 id: int(PK)
 service_office_id: int(FK=service_office.id not null)
-name:  var(30) not null
+name:  text(30) not null
 birthday: datetime
-disease: var
+disease: text
+created_at: datetime default=datetime.jstnow
+updated_at: datetime default=datetime.jstnow
+```
+
+UserServiceOffice
+
+```
+id: int(PK)
+user_id: int(FK=user.id)
+service_office_id: int(FK=service_office.id)
+role: text
+created_at: datetime default=datetime.jstnow
+updated_at: datetime default=datetime.jstnow
+```
+
+ServiceRecipientOffice
+
+```
+id: int(PK)
+service_recipient_id: int(FK=service_recipient.id)
+service_office_id: int(FK=service_office.id)
+created_at: datetime default=datetime.jstnow
+updated_at: datetime default=datetime.jstnow
 ```
 
 ServiceOffice
 
 ```
 id: int(PK)
-user_id: int(FK=user.id)
-service_recipient_id: int(FK=service_recipient.id)
-name: var
-type: var
+name: text
+type: text
+created_at: datetime default=datetime.jstnow
+updated_at: datetime default=datetime.jstnow
 ```
 
 Notice
@@ -104,8 +134,25 @@ Notice
 id: int(PK)
 service_office_id: int(FK=service_office.id not null)
 service_recipient_id: int(FK=service_recipient.id not null)
-message: var
-birth_month_included: boolean
+support_plan_id: int(FK=support_plan.id not null)  // 関連する支援計画を明示的に参照
+message: text
+notification_type: enum('deadline', 'birthday', 'both')  // birth_month_includedの代わり
+deadline_date: datetime  // 期限日そのものを保存
+is_read: boolean default false  // 既読状態を追跡
+priority: int default 1  // 優先度（誕生月と重なる場合は高く設定）
+created_at: datetime default=datetime.jstnow
+updated_at: datetime default=datetime.jstnow
+```
+
+UserNotificationSettings
+
+```
+id: int(PK)
+user_id: int(FK=user.id)
+email_notifications: boolean
+deadline_advance_days: int
+created_at: datetime default=datetime.jstnow
+updated_at: datetime default=datetime.jstnow
 ```
 
 SupportPlanner
@@ -113,8 +160,10 @@ SupportPlanner
 ```
 id: int(PK)
 service_recipient_id: int(FK=service_recipient.id not null)
-name: var
-contact: var
+name: text
+contact: text
+created_at: datetime default=datetime.jstnow
+updated_at: datetime default=datetime.jstnow
 ```
 
 SupportPlan
@@ -129,6 +178,22 @@ draft_plan: boolean(default = false) 　
 meeting_of_managers: boolean(default = false)
 this_plan: boolean(default = false)
 monitoring: boolean(default = false)
+created_at: datetime default=datetime.jstnow
+updated_at: datetime default=datetime.jstnow
+```
+
+SupportPlanStatus
+
+```
+id: int(PK)
+support_plan_id: int(FK=support_plan.id)
+step_type: enum('assessment', 'draft_plan', 'meeting_of_managers', 'this_plan', 'monitoring')
+completed: boolean
+completed_at: datetime
+completed_by: int(FK=user.id)
+notes: text
+created_at: datetime default=datetime.jstnow
+updated_at: datetime default=datetime.jstnow
 ```
 
 Deliverables
@@ -136,6 +201,8 @@ Deliverables
 ```
 id: int(PK)
 support_plan_id: int(FK=support_plan.id)
-file_path: var
-file_view: var
+file_path: text
+file_view: text
+created_at: datetime default=datetime.jstnow
+updated_at: datetime default=datetime.jstnow
 ```
