@@ -90,6 +90,7 @@ ServiceRecipient
 ```　　
 id: int(PK)
 service_office_id: int(FK=service_office.id not null)
+user_id: int(FK=user.id)
 name:  text(30) not null
 birthday: datetime
 disease: text
@@ -242,6 +243,7 @@ datetime updated_at
     ServiceRecipient {
         int id PK
         int service_office_id FK
+        int user_id FK
         text name
         datetime birthday
         text disease
