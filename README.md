@@ -111,6 +111,18 @@ https://qiita.com/ho_na/items/a84f9a0db793cb0411db
 | 4      | 環境最適化設計       | 電力効率を最大化するアーキテクチャ。グリーンエネルギー利用     |
 | 5      | カーボンニュートラル | 完全な環境影響評価。カーボンオフセット。100%再生可能エネルギー |
 
+- Amazon EC2
+- Amazon RDS
+- Amazon S3
+- Amazon Cognito
+- Amazon WAF
+- Amazon KMS
+- Amazon SES
+- Amazon SNS
+- AWS Backup
+- Amazon ELB
+- AWS Lambda
+
 # github actions CI/CD
 
 # データ設計
