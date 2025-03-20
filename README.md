@@ -127,7 +127,7 @@ https://qiita.com/ho_na/items/a84f9a0db793cb0411db
 
 # 開発手法
 
-TDD 　モック
+TDD モック jest
 
 # データ設計
 
