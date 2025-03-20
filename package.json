@@ -7,8 +7,8 @@
     "start": "electron .",
     "build": "webpack && tsc -p tsconfig.electron.json",
     "dev": "concurrently \"webpack --watch\" \"tsc -p tsconfig.electron.json --watch\" \"electron .\"",
-    "prisma:generate": "prisma generate --schema=./src/database/prisma/schema.prisma",
-    "migrate:dev": "prisma migrate dev --schema=./src/database/prisma/schema.prisma",
+    "prisma:generate": "prisma generate --schema=./src/api/prisma/schema.prisma",
+    "migrate:dev": "prisma migrate dev --schema=./src/api/prisma/schema.prisma",
     "test": "jest",
     "test:watch": "jest --watch"
   },
@@ -25,6 +25,7 @@
     "electron-updater": "^6.3.9",
     "googleapis": "^146.0.0",
     "jsonwebtoken": "^9.0.2",
+    "postgres": "^3.4.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.3.0",
