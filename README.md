@@ -148,7 +148,7 @@ AccessToken
 ```
 id: int(PK)
 user_id: int(FK=user.id)
-token: text
+session_token: text
 is_active: boolean default=true
 created_at: datetime default=datetime.jstnow
 updated_at: datetime default=datetime.jstnow
